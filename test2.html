@@ -1,0 +1,170 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 750px;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "video games", "label": "video games", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "Microsoft", "label": "Microsoft", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "Nintendo", "label": "Nintendo", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "analog controller", "label": "analog controller", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "Sony", "label": "Sony", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "Valve", "label": "Valve", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "controller", "label": "controller", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "games", "label": "games", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "keyboard", "label": "keyboard", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "specialized controllers", "label": "specialized controllers", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "video", "label": "video", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "complex games", "label": "complex games", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "sort", "label": "sort", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "specialized", "label": "specialized", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "custom", "label": "custom", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "console", "label": "console", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "standardized", "label": "standardized", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "mouse", "label": "mouse", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "analog", "label": "analog", "shape": "dot", "size": 38}, {"color": "#97c2fc", "id": "differences", "label": "differences", "shape": "dot", "size": 38}]);
+                  edges = new vis.DataSet([{"from": "video games", "to": "Microsoft", "width": 1.8115}, {"from": "video games", "to": "Nintendo", "width": 2.943}, {"from": "video games", "to": "analog controller", "width": 0.9755}, {"from": "video games", "to": "Sony", "width": 1.9389999999999998}, {"from": "video games", "to": "Valve", "width": 1.6159999999999999}, {"from": "video games", "to": "controller", "width": 1.454}, {"from": "video games", "to": "games", "width": 3.8745000000000003}, {"from": "video games", "to": "keyboard", "width": 1.6415}, {"from": "video games", "to": "specialized controllers", "width": 1.2640000000000002}, {"from": "video games", "to": "video", "width": 1.935}, {"from": "video games", "to": "complex games", "width": 3.1580000000000004}, {"from": "video games", "to": "sort", "width": 1.35}, {"from": "video games", "to": "specialized", "width": 1.1385}, {"from": "video games", "to": "custom", "width": 1.036}, {"from": "video games", "to": "console", "width": 2.1959999999999997}, {"from": "video games", "to": "standardized", "width": 0.3755}, {"from": "video games", "to": "mouse", "width": 1.8215000000000001}, {"from": "video games", "to": "analog", "width": 1.6875}, {"from": "video games", "to": "differences", "width": 0.997}, {"from": "Microsoft", "to": "Nintendo", "width": 2.2925}, {"from": "Microsoft", "to": "analog controller", "width": 0.725}, {"from": "Microsoft", "to": "Sony", "width": 2.0425}, {"from": "Microsoft", "to": "Valve", "width": 1.9120000000000001}, {"from": "Microsoft", "to": "controller", "width": 1.1055}, {"from": "Microsoft", "to": "games", "width": 1.6789999999999998}, {"from": "Microsoft", "to": "keyboard", "width": 2.11}, {"from": "Microsoft", "to": "specialized controllers", "width": 1.041}, {"from": "Microsoft", "to": "video", "width": 1.129}, {"from": "Microsoft", "to": "complex games", "width": 1.5474999999999999}, {"from": "Microsoft", "to": "sort", "width": 1.3439999999999999}, {"from": "Microsoft", "to": "specialized", "width": 1.6159999999999999}, {"from": "Microsoft", "to": "custom", "width": 1.5884999999999998}, {"from": "Microsoft", "to": "console", "width": 1.9975}, {"from": "Microsoft", "to": "standardized", "width": 1.2965}, {"from": "Microsoft", "to": "mouse", "width": 1.8045}, {"from": "Microsoft", "to": "analog", "width": 1.532}, {"from": "Microsoft", "to": "differences", "width": 1.0745}, {"from": "Nintendo", "to": "analog controller", "width": 1.25}, {"from": "Nintendo", "to": "Sony", "width": 2.443}, {"from": "Nintendo", "to": "Valve", "width": 1.692}, {"from": "Nintendo", "to": "controller", "width": 1.7480000000000002}, {"from": "Nintendo", "to": "games", "width": 2.8834999999999997}, {"from": "Nintendo", "to": "keyboard", "width": 2.1845}, {"from": "Nintendo", "to": "specialized controllers", "width": 1.5835}, {"from": "Nintendo", "to": "video", "width": 1.1640000000000001}, {"from": "Nintendo", "to": "complex games", "width": 2.2925}, {"from": "Nintendo", "to": "sort", "width": 1.322}, {"from": "Nintendo", "to": "specialized", "width": 1.4615}, {"from": "Nintendo", "to": "custom", "width": 1.4569999999999999}, {"from": "Nintendo", "to": "console", "width": 2.5700000000000003}, {"from": "Nintendo", "to": "standardized", "width": 0.9329999999999999}, {"from": "Nintendo", "to": "mouse", "width": 2.2915}, {"from": "Nintendo", "to": "analog", "width": 1.935}, {"from": "Nintendo", "to": "differences", "width": 1.2985}, {"from": "analog controller", "to": "Sony", "width": 1.412}, {"from": "analog controller", "to": "Valve", "width": 0.6015}, {"from": "analog controller", "to": "controller", "width": 3.3765}, {"from": "analog controller", "to": "games", "width": 0.8115}, {"from": "analog controller", "to": "keyboard", "width": 0.7705}, {"from": "analog controller", "to": "specialized controllers", "width": 2.543}, {"from": "analog controller", "to": "video", "width": 0.6675}, {"from": "analog controller", "to": "complex games", "width": 0.7865}, {"from": "analog controller", "to": "sort", "width": 0.22100000000000003}, {"from": "analog controller", "to": "specialized", "width": 0.3325}, {"from": "analog controller", "to": "custom", "width": 0.8165}, {"from": "analog controller", "to": "console", "width": 1.4575}, {"from": "analog controller", "to": "standardized", "width": 0.2765}, {"from": "analog controller", "to": "mouse", "width": 0.996}, {"from": "analog controller", "to": "analog", "width": 3.268}, {"from": "analog controller", "to": "differences", "width": 0.372}, {"from": "Sony", "to": "Valve", "width": 0.9594999999999999}, {"from": "Sony", "to": "controller", "width": 1.399}, {"from": "Sony", "to": "games", "width": 1.8175}, {"from": "Sony", "to": "keyboard", "width": 1.847}, {"from": "Sony", "to": "specialized controllers", "width": 1.151}, {"from": "Sony", "to": "video", "width": 1.8335000000000001}, {"from": "Sony", "to": "complex games", "width": 1.0030000000000001}, {"from": "Sony", "to": "sort", "width": 1.0545}, {"from": "Sony", "to": "specialized", "width": 1.326}, {"from": "Sony", "to": "custom", "width": 1.3415}, {"from": "Sony", "to": "console", "width": 1.9184999999999999}, {"from": "Sony", "to": "standardized", "width": 0.7265}, {"from": "Sony", "to": "mouse", "width": 1.6575000000000002}, {"from": "Sony", "to": "analog", "width": 2.173}, {"from": "Sony", "to": "differences", "width": 0.9145000000000001}, {"from": "Valve", "to": "controller", "width": 1.1475}, {"from": "Valve", "to": "games", "width": 1.732}, {"from": "Valve", "to": "keyboard", "width": 1.7595}, {"from": "Valve", "to": "specialized controllers", "width": 0.8674999999999999}, {"from": "Valve", "to": "video", "width": 1.289}, {"from": "Valve", "to": "complex games", "width": 1.2185}, {"from": "Valve", "to": "sort", "width": 1.1145}, {"from": "Valve", "to": "specialized", "width": 1.2970000000000002}, {"from": "Valve", "to": "custom", "width": 1.335}, {"from": "Valve", "to": "console", "width": 1.5945}, {"from": "Valve", "to": "standardized", "width": 1.1165}, {"from": "Valve", "to": "mouse", "width": 0.974}, {"from": "Valve", "to": "analog", "width": 1.188}, {"from": "Valve", "to": "differences", "width": 1.1405}, {"from": "controller", "to": "games", "width": 1.309}, {"from": "controller", "to": "keyboard", "width": 1.729}, {"from": "controller", "to": "specialized controllers", "width": 3.3600000000000003}, {"from": "controller", "to": "video", "width": 1.3850000000000002}, {"from": "controller", "to": "complex games", "width": 1.367}, {"from": "controller", "to": "sort", "width": 0.746}, {"from": "controller", "to": "specialized", "width": 0.9139999999999999}, {"from": "controller", "to": "custom", "width": 1.5795000000000001}, {"from": "controller", "to": "console", "width": 2.325}, {"from": "controller", "to": "standardized", "width": 0.4985}, {"from": "controller", "to": "mouse", "width": 1.591}, {"from": "controller", "to": "analog", "width": 1.3965}, {"from": "controller", "to": "differences", "width": 0.727}, {"from": "games", "to": "keyboard", "width": 1.584}, {"from": "games", "to": "specialized controllers", "width": 0.8640000000000001}, {"from": "games", "to": "video", "width": 1.8645}, {"from": "games", "to": "complex games", "width": 3.464}, {"from": "games", "to": "sort", "width": 1.5190000000000001}, {"from": "games", "to": "specialized", "width": 1.002}, {"from": "games", "to": "custom", "width": 1.3769999999999998}, {"from": "games", "to": "console", "width": 2.16}, {"from": "games", "to": "standardized", "width": 0.55}, {"from": "games", "to": "mouse", "width": 1.5635}, {"from": "games", "to": "analog", "width": 1.631}, {"from": "games", "to": "differences", "width": 1.182}, {"from": "keyboard", "to": "specialized controllers", "width": 1.3095}, {"from": "keyboard", "to": "video", "width": 1.0005}, {"from": "keyboard", "to": "complex games", "width": 0.943}, {"from": "keyboard", "to": "sort", "width": 1.101}, {"from": "keyboard", "to": "specialized", "width": 1.5090000000000001}, {"from": "keyboard", "to": "custom", "width": 1.5490000000000002}, {"from": "keyboard", "to": "console", "width": 2.2955}, {"from": "keyboard", "to": "standardized", "width": 0.9810000000000001}, {"from": "keyboard", "to": "mouse", "width": 2.7485}, {"from": "keyboard", "to": "analog", "width": 1.3054999999999999}, {"from": "keyboard", "to": "differences", "width": 0.916}, {"from": "specialized controllers", "to": "video", "width": 0.635}, {"from": "specialized controllers", "to": "complex games", "width": 1.5290000000000001}, {"from": "specialized controllers", "to": "sort", "width": 0.22849999999999998}, {"from": "specialized controllers", "to": "specialized", "width": 3.1755}, {"from": "specialized controllers", "to": "custom", "width": 1.5274999999999999}, {"from": "specialized controllers", "to": "console", "width": 1.033}, {"from": "specialized controllers", "to": "standardized", "width": 1.0805}, {"from": "specialized controllers", "to": "mouse", "width": 1.266}, {"from": "specialized controllers", "to": "analog", "width": 1.3425}, {"from": "specialized controllers", "to": "differences", "width": 0.7775}, {"from": "video", "to": "complex games", "width": 0.7965}, {"from": "video", "to": "sort", "width": 1.178}, {"from": "video", "to": "specialized", "width": 0.9075}, {"from": "video", "to": "custom", "width": 1.2145000000000001}, {"from": "video", "to": "console", "width": 1.8375}, {"from": "video", "to": "standardized", "width": 0.627}, {"from": "video", "to": "mouse", "width": 1.414}, {"from": "video", "to": "analog", "width": 1.4005}, {"from": "video", "to": "differences", "width": 1.429}, {"from": "complex games", "to": "sort", "width": 1.12}, {"from": "complex games", "to": "specialized", "width": 1.0205}, {"from": "complex games", "to": "custom", "width": 1.1484999999999999}, {"from": "complex games", "to": "console", "width": 1.2570000000000001}, {"from": "complex games", "to": "standardized", "width": 0.5165}, {"from": "complex games", "to": "mouse", "width": 1.1005}, {"from": "complex games", "to": "analog", "width": 1.1675}, {"from": "complex games", "to": "differences", "width": 0.9035}, {"from": "sort", "to": "specialized", "width": 1.113}, {"from": "sort", "to": "custom", "width": 1.2770000000000001}, {"from": "sort", "to": "console", "width": 1.5054999999999998}, {"from": "sort", "to": "standardized", "width": 0.651}, {"from": "sort", "to": "mouse", "width": 1.0755000000000001}, {"from": "sort", "to": "analog", "width": 1.1035}, {"from": "sort", "to": "differences", "width": 1.093}, {"from": "specialized", "to": "custom", "width": 2.005}, {"from": "specialized", "to": "console", "width": 0.94}, {"from": "specialized", "to": "standardized", "width": 1.7755}, {"from": "specialized", "to": "mouse", "width": 1.2385}, {"from": "specialized", "to": "analog", "width": 1.4315}, {"from": "specialized", "to": "differences", "width": 1.2955}, {"from": "custom", "to": "console", "width": 1.4765000000000001}, {"from": "custom", "to": "standardized", "width": 1.696}, {"from": "custom", "to": "mouse", "width": 1.5525}, {"from": "custom", "to": "analog", "width": 1.4525}, {"from": "custom", "to": "differences", "width": 1.361}, {"from": "console", "to": "standardized", "width": 0.7455}, {"from": "console", "to": "mouse", "width": 2.2015000000000002}, {"from": "console", "to": "analog", "width": 1.522}, {"from": "console", "to": "differences", "width": 1.1805}, {"from": "standardized", "to": "mouse", "width": 0.705}, {"from": "standardized", "to": "analog", "width": 1.2795}, {"from": "standardized", "to": "differences", "width": 1.7255}, {"from": "mouse", "to": "analog", "width": 1.609}, {"from": "mouse", "to": "differences", "width": 0.9175}, {"from": "analog", "to": "differences", "width": 1.2355}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

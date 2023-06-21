@@ -1,0 +1,170 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 750px;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "Hack Chat group", "label": "Hack Chat group", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Hack Chat", "label": "Hack Chat", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Hackaday.io Hack Chat", "label": "Hackaday.io Hack Chat", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "resources to accomplish", "label": "resources to accomplish", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Hack", "label": "Hack", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Hack Chats", "label": "Hack Chats", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Chat group", "label": "Chat group", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Chief Research Officer", "label": "Chief Research Officer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Chat", "label": "Chat", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "satellite", "label": "satellite", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Hackaday.io Hack", "label": "Hackaday.io Hack", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "space", "label": "space", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "time", "label": "time", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "amateur satellites", "label": "amateur satellites", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Chat group messaging", "label": "Chat group messaging", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "satellite construction", "label": "satellite construction", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "launches", "label": "launches", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Nathaniel Evry", "label": "Nathaniel Evry", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Research Officer", "label": "Research Officer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Satellite launches", "label": "Satellite launches", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"from": "Hack Chat group", "to": "Hack Chat", "width": 4.3565}, {"from": "Hack Chat group", "to": "Hackaday.io Hack Chat", "width": 4.0095}, {"from": "Hack Chat group", "to": "resources to accomplish", "width": 0.4835}, {"from": "Hack Chat group", "to": "Hack", "width": 3.119}, {"from": "Hack Chat group", "to": "Hack Chats", "width": 4.189}, {"from": "Hack Chat group", "to": "Chat group", "width": 3.87}, {"from": "Hack Chat group", "to": "Chief Research Officer", "width": 0.27799999999999997}, {"from": "Hack Chat group", "to": "Chat", "width": 2.6045000000000003}, {"from": "Hack Chat group", "to": "satellite", "width": 0.7045}, {"from": "Hack Chat group", "to": "Hackaday.io Hack", "width": 2.964}, {"from": "Hack Chat group", "to": "space", "width": 0.6545}, {"from": "Hack Chat group", "to": "time", "width": 0.7255}, {"from": "Hack Chat group", "to": "amateur satellites", "width": 0.7855}, {"from": "Hack Chat group", "to": "Chat group messaging", "width": 3.593}, {"from": "Hack Chat group", "to": "satellite construction", "width": 0.23249999999999998}, {"from": "Hack Chat group", "to": "launches", "width": 0.61}, {"from": "Hack Chat group", "to": "Nathaniel Evry", "width": 0.2495}, {"from": "Hack Chat group", "to": "Research Officer", "width": 0.2895}, {"from": "Hack Chat", "to": "Hackaday.io Hack Chat", "width": 4.4035}, {"from": "Hack Chat", "to": "resources to accomplish", "width": 0.6105}, {"from": "Hack Chat", "to": "Hack", "width": 3.6785}, {"from": "Hack Chat", "to": "Hack Chats", "width": 4.8405}, {"from": "Hack Chat", "to": "Chat group", "width": 2.767}, {"from": "Hack Chat", "to": "Chat", "width": 3.1305}, {"from": "Hack Chat", "to": "satellite", "width": 1.018}, {"from": "Hack Chat", "to": "Hackaday.io Hack", "width": 3.187}, {"from": "Hack Chat", "to": "space", "width": 0.7955}, {"from": "Hack Chat", "to": "time", "width": 0.996}, {"from": "Hack Chat", "to": "amateur satellites", "width": 0.977}, {"from": "Hack Chat", "to": "Satellite launches", "width": 0.3315}, {"from": "Hack Chat", "to": "Chat group messaging", "width": 2.767}, {"from": "Hack Chat", "to": "satellite construction", "width": 0.4385}, {"from": "Hack Chat", "to": "launches", "width": 0.7195}, {"from": "Hack Chat", "to": "Nathaniel Evry", "width": 0.22849999999999998}, {"from": "Hack Chat", "to": "Research Officer", "width": 0.337}, {"from": "Hackaday.io Hack Chat", "to": "resources to accomplish", "width": 0.444}, {"from": "Hackaday.io Hack Chat", "to": "Hack", "width": 3.181}, {"from": "Hackaday.io Hack Chat", "to": "Hack Chats", "width": 4.196}, {"from": "Hackaday.io Hack Chat", "to": "Chat group", "width": 2.2515}, {"from": "Hackaday.io Hack Chat", "to": "Chat", "width": 2.1945}, {"from": "Hackaday.io Hack Chat", "to": "satellite", "width": 0.5585}, {"from": "Hackaday.io Hack Chat", "to": "Hackaday.io Hack", "width": 4.1775}, {"from": "Hackaday.io Hack Chat", "to": "time", "width": 0.566}, {"from": "Hackaday.io Hack Chat", "to": "amateur satellites", "width": 0.679}, {"from": "Hackaday.io Hack Chat", "to": "Chat group messaging", "width": 2.242}, {"from": "Hackaday.io Hack Chat", "to": "launches", "width": 0.5395}, {"from": "Hackaday.io Hack Chat", "to": "Nathaniel Evry", "width": 0.264}, {"from": "resources to accomplish", "to": "Hack", "width": 1.1705}, {"from": "resources to accomplish", "to": "Hack Chats", "width": 0.836}, {"from": "resources to accomplish", "to": "Chat group", "width": 0.7994999999999999}, {"from": "resources to accomplish", "to": "Chief Research Officer", "width": 1.4155000000000002}, {"from": "resources to accomplish", "to": "Chat", "width": 1.3485}, {"from": "resources to accomplish", "to": "satellite", "width": 0.9415}, {"from": "resources to accomplish", "to": "Hackaday.io Hack", "width": 0.5285}, {"from": "resources to accomplish", "to": "space", "width": 0.7835000000000001}, {"from": "resources to accomplish", "to": "time", "width": 0.784}, {"from": "resources to accomplish", "to": "amateur satellites", "width": 1.0895000000000001}, {"from": "resources to accomplish", "to": "Satellite launches", "width": 0.8694999999999999}, {"from": "resources to accomplish", "to": "Chat group messaging", "width": 0.5415}, {"from": "resources to accomplish", "to": "satellite construction", "width": 1.0925}, {"from": "resources to accomplish", "to": "launches", "width": 1.407}, {"from": "resources to accomplish", "to": "Nathaniel Evry", "width": 0.5489999999999999}, {"from": "resources to accomplish", "to": "Research Officer", "width": 1.5090000000000001}, {"from": "Hack", "to": "Hack Chats", "width": 3.605}, {"from": "Hack", "to": "Chat group", "width": 1.404}, {"from": "Hack", "to": "Chief Research Officer", "width": 0.6935}, {"from": "Hack", "to": "Chat", "width": 1.7894999999999999}, {"from": "Hack", "to": "satellite", "width": 1.436}, {"from": "Hack", "to": "Hackaday.io Hack", "width": 3.5945}, {"from": "Hack", "to": "space", "width": 1.34}, {"from": "Hack", "to": "time", "width": 1.7610000000000001}, {"from": "Hack", "to": "amateur satellites", "width": 1.288}, {"from": "Hack", "to": "Satellite launches", "width": 0.7525}, {"from": "Hack", "to": "Chat group messaging", "width": 0.9635}, {"from": "Hack", "to": "satellite construction", "width": 0.665}, {"from": "Hack", "to": "launches", "width": 1.3375000000000001}, {"from": "Hack", "to": "Nathaniel Evry", "width": 0.5145000000000001}, {"from": "Hack", "to": "Research Officer", "width": 0.8085}, {"from": "Hack Chats", "to": "Chat group", "width": 2.62}, {"from": "Hack Chats", "to": "Chief Research Officer", "width": 0.2045}, {"from": "Hack Chats", "to": "Chat", "width": 2.9899999999999998}, {"from": "Hack Chats", "to": "satellite", "width": 0.9855}, {"from": "Hack Chats", "to": "Hackaday.io Hack", "width": 3.0170000000000003}, {"from": "Hack Chats", "to": "space", "width": 0.782}, {"from": "Hack Chats", "to": "time", "width": 1.0025}, {"from": "Hack Chats", "to": "amateur satellites", "width": 1.129}, {"from": "Hack Chats", "to": "Satellite launches", "width": 0.4165}, {"from": "Hack Chats", "to": "Chat group messaging", "width": 2.616}, {"from": "Hack Chats", "to": "satellite construction", "width": 0.482}, {"from": "Hack Chats", "to": "launches", "width": 0.737}, {"from": "Hack Chats", "to": "Nathaniel Evry", "width": 0.2625}, {"from": "Hack Chats", "to": "Research Officer", "width": 0.386}, {"from": "Chat group", "to": "Chief Research Officer", "width": 0.619}, {"from": "Chat group", "to": "Chat", "width": 3.6020000000000003}, {"from": "Chat group", "to": "satellite", "width": 1.0655000000000001}, {"from": "Chat group", "to": "Hackaday.io Hack", "width": 0.8795}, {"from": "Chat group", "to": "space", "width": 1.2555}, {"from": "Chat group", "to": "time", "width": 1.049}, {"from": "Chat group", "to": "amateur satellites", "width": 0.8025}, {"from": "Chat group", "to": "Satellite launches", "width": 0.21999999999999997}, {"from": "Chat group", "to": "Chat group messaging", "width": 4.368}, {"from": "Chat group", "to": "satellite construction", "width": 0.27799999999999997}, {"from": "Chat group", "to": "launches", "width": 0.781}, {"from": "Chat group", "to": "Nathaniel Evry", "width": 0.5745}, {"from": "Chat group", "to": "Research Officer", "width": 0.7025000000000001}, {"from": "Chief Research Officer", "to": "Chat", "width": 0.6895}, {"from": "Chief Research Officer", "to": "satellite", "width": 1.09}, {"from": "Chief Research Officer", "to": "Hackaday.io Hack", "width": 0.26}, {"from": "Chief Research Officer", "to": "space", "width": 0.838}, {"from": "Chief Research Officer", "to": "time", "width": 0.8355}, {"from": "Chief Research Officer", "to": "amateur satellites", "width": 1.134}, {"from": "Chief Research Officer", "to": "Satellite launches", "width": 0.4135}, {"from": "Chief Research Officer", "to": "satellite construction", "width": 0.8340000000000001}, {"from": "Chief Research Officer", "to": "launches", "width": 0.6345000000000001}, {"from": "Chief Research Officer", "to": "Nathaniel Evry", "width": 1.0825}, {"from": "Chief Research Officer", "to": "Research Officer", "width": 4.3235}, {"from": "Chat", "to": "satellite", "width": 1.544}, {"from": "Chat", "to": "Hackaday.io Hack", "width": 0.6655}, {"from": "Chat", "to": "space", "width": 1.568}, {"from": "Chat", "to": "time", "width": 1.6205}, {"from": "Chat", "to": "amateur satellites", "width": 1.0030000000000001}, {"from": "Chat", "to": "Satellite launches", "width": 0.41000000000000003}, {"from": "Chat", "to": "Chat group messaging", "width": 3.252}, {"from": "Chat", "to": "satellite construction", "width": 0.5700000000000001}, {"from": "Chat", "to": "launches", "width": 1.0274999999999999}, {"from": "Chat", "to": "Nathaniel Evry", "width": 0.571}, {"from": "Chat", "to": "Research Officer", "width": 1.1345}, {"from": "satellite", "to": "Hackaday.io Hack", "width": 0.6165}, {"from": "satellite", "to": "space", "width": 2.293}, {"from": "satellite", "to": "time", "width": 1.152}, {"from": "satellite", "to": "amateur satellites", "width": 3.8655}, {"from": "satellite", "to": "Satellite launches", "width": 3.443}, {"from": "satellite", "to": "Chat group messaging", "width": 0.6115}, {"from": "satellite", "to": "satellite construction", "width": 3.6985}, {"from": "satellite", "to": "launches", "width": 1.3769999999999998}, {"from": "satellite", "to": "Nathaniel Evry", "width": 0.27}, {"from": "satellite", "to": "Research Officer", "width": 1.2870000000000001}, {"from": "Hackaday.io Hack", "to": "time", "width": 0.4685}, {"from": "Hackaday.io Hack", "to": "amateur satellites", "width": 0.81}, {"from": "Hackaday.io Hack", "to": "Satellite launches", "width": 0.365}, {"from": "Hackaday.io Hack", "to": "Chat group messaging", "width": 0.6685000000000001}, {"from": "Hackaday.io Hack", "to": "launches", "width": 0.698}, {"from": "Hackaday.io Hack", "to": "Nathaniel Evry", "width": 0.3195}, {"from": "Hackaday.io Hack", "to": "Research Officer", "width": 0.248}, {"from": "space", "to": "time", "width": 1.8094999999999999}, {"from": "space", "to": "amateur satellites", "width": 1.56}, {"from": "space", "to": "Satellite launches", "width": 1.4460000000000002}, {"from": "space", "to": "Chat group messaging", "width": 0.6519999999999999}, {"from": "space", "to": "satellite construction", "width": 1.5245}, {"from": "space", "to": "launches", "width": 1.4765000000000001}, {"from": "space", "to": "Nathaniel Evry", "width": 0.836}, {"from": "space", "to": "Research Officer", "width": 1.128}, {"from": "time", "to": "amateur satellites", "width": 0.8125}, {"from": "time", "to": "Satellite launches", "width": 0.5085}, {"from": "time", "to": "Chat group messaging", "width": 0.531}, {"from": "time", "to": "satellite construction", "width": 0.444}, {"from": "time", "to": "launches", "width": 1.1535}, {"from": "time", "to": "Nathaniel Evry", "width": 0.8655}, {"from": "time", "to": "Research Officer", "width": 1.048}, {"from": "amateur satellites", "to": "Satellite launches", "width": 3.302}, {"from": "amateur satellites", "to": "Chat group messaging", "width": 0.47050000000000003}, {"from": "amateur satellites", "to": "satellite construction", "width": 3.4675000000000002}, {"from": "amateur satellites", "to": "launches", "width": 1.3625}, {"from": "amateur satellites", "to": "Nathaniel Evry", "width": 0.4415}, {"from": "amateur satellites", "to": "Research Officer", "width": 1.3780000000000001}, {"from": "Satellite launches", "to": "satellite construction", "width": 3.2329999999999997}, {"from": "Satellite launches", "to": "launches", "width": 3.263}, {"from": "Satellite launches", "to": "Research Officer", "width": 0.491}, {"from": "Chat group messaging", "to": "launches", "width": 0.4405}, {"from": "Chat group messaging", "to": "Nathaniel Evry", "width": 0.246}, {"from": "satellite construction", "to": "launches", "width": 0.9025}, {"from": "satellite construction", "to": "Research Officer", "width": 0.8805000000000001}, {"from": "launches", "to": "Nathaniel Evry", "width": 0.8094999999999999}, {"from": "launches", "to": "Research Officer", "width": 0.7215}, {"from": "Nathaniel Evry", "to": "Research Officer", "width": 1.2885}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
